@@ -1,0 +1,17 @@
+# Large Precompiled Binaries & Chromium Engine Files (>100MB exceeds GitHub push limits)
+macle-simulator-bin
+chrome-sandbox
+chrome_crashpad_handler
+*.so
+*.so.*
+*.pak
+*.dat
+*.bin
+locales/
+
+# Temporary / OS files
+.DS_Store
+Thumbs.db
+
+# Logs & Debugging
+*.log

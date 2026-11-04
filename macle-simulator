@@ -1,0 +1,23 @@
+#!/bin/bash
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Ensure clean environment
+export ELECTRON_RUN_AS_NODE=""
+unset ELECTRON_RUN_AS_NODE
+
+# Check if headless and neither -o nor --web is passed
+if [ -z "$DISPLAY" ] && [ -z "$WAYLAND_DISPLAY" ]; then
+    HAS_SERVER_ARG=0
+    for arg in "$@"; do
+        if [ "$arg" == "-o" ] || [ "$arg" == "--only-server" ] || [ "$arg" == "--web" ] || [ "$arg" == "-w" ]; then
+            HAS_SERVER_ARG=1
+            break
+        fi
+    done
+    if [ "$HAS_SERVER_ARG" -eq 0 ]; then
+        # Fall back to web simulator mode
+        exec "$DIR/macle-simulator-bin" "--web" "$@"
+    fi
+fi
+
+exec "$DIR/macle-simulator-bin" "$@"

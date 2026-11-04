@@ -1,0 +1,40 @@
+{
+  "api": {
+    "getLocation": {
+      "verticalAccuracy": 10,
+      "speed": -1,
+      "longitude": 118.76191309804084,
+      "horizontalAccuracy": 65,
+      "latitude": 31.982052781804494,
+      "accuracy": 65,
+      "altitude": 59.177478790283203
+    },
+    "getSystemInfo": {
+      "brand": "devtool",
+      "system": "devtool 22.6.0",
+      "model": "iphone 6/7/8",
+      "pixelRatio": "2",
+      "screenHeight": 667,
+      "screenWidth": 375,
+      "statusBarHeight": 20,
+      "windowHeight": 667,
+      "windowWidth": 375,
+      "language": "en-US"
+    },
+    "getSystemSetting": {
+      "bluetoothEnabled": true,
+      "locationEnabled": true,
+      "wifiEnabled": true,
+      "deviceOrientation": "portrait"
+    },
+    "getKbzBackendServerUrl": ""
+  },
+  "thirdPartyAuth": {},
+  "cache": {
+    "permission": {}
+  },
+  "axios": {
+    "baseUrl": "/mcss/simulate"
+  },
+  "statusBar": false
+}

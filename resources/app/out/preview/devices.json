@@ -1,0 +1,86 @@
+{
+    "default": [
+        {
+            "value": "iPhone 5",
+            "text": "iPhone 5(320 x 568 | Dpr:2)",
+            "width": 320,
+            "height": 568,
+            "dpr": 2,
+            "brand": "devtool",
+            "system": "devtool 22.6.0"
+        },
+        {
+            "value": "iPhone 6...",
+            "text": "iPhone 6/7/8(375 x 667 | Dpr:2)",
+            "width": 375,
+            "height": 667,
+            "dpr": 2,
+            "brand": "devtool",
+            "system": "devtool 22.6.0"
+        },
+        {
+            "value": "iPhone 6P...",
+            "text": "iPhone 6/7/8 Plus(414 x 736 | Dpr:3)",
+            "width": 414,
+            "height": 736,
+            "dpr": 3,
+            "brand": "devtool",
+            "system": "devtool 22.6.0"
+        },
+        {
+            "value": "iPhone X",
+            "text": "iPhone X(375 x 812 | Dpr:3)",
+            "width": 375,
+            "height": 812,
+            "dpr": 3,
+            "brand": "devtool",
+            "system": "devtool 22.6.0"
+        },
+        {
+            "value": "iPhone XR",
+            "text": "iPhone XR(414 x 896 | Dpr:2)",
+            "width": 414,
+            "height": 896,
+            "dpr": 2,
+            "brand": "devtool",
+            "system": "devtool 22.6.0"
+        },
+        {
+            "value": "iPhone XS Max",
+            "text": "iPhone XS MAX(414 x 896 | Dpr:3)",
+            "width": 414,
+            "height": 896,
+            "dpr": 3,
+            "brand": "devtool",
+            "system": "devtool 22.6.0"
+        },
+        {
+            "value": "iPhone 14P...",
+            "text": "iPhone 14/15 Pro Max(430 x 932 | Dpr:3)",
+            "width": 430,
+            "height": 932,
+            "dpr": 3,
+            "brand": "devtool",
+            "system": "devtool 22.6.0"
+        },
+        {
+            "value": "Nexus 5",
+            "text": "Nexus 5(360 x 640 | Dpr:3)",
+            "width": 360,
+            "height": 640,
+            "dpr": 3,
+            "brand": "devtool",
+            "system": "devtool 22.6.0"
+        },
+        {
+            "value": "Nexus 6",
+            "text": "Nexus 6(412 x 732 | Dpr:3.5)",
+            "width": 412,
+            "height": 732,
+            "dpr": 3.5,
+            "brand": "devtool",
+            "system": "devtool 22.6.0"
+        }
+    ],
+    "custom": []
+}

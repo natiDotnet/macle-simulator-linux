@@ -1,0 +1,52 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2024-2024. All rights reserved.
+ */
+
+@font-face {
+  font-family: 'macleui';
+  src: url('../assets/fonts/macleui.ttf?17tb1d') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^='icon-'],
+[class*=' icon-'] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'macleui' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-copy:before {
+  content: '\e901';
+}
+.icon-debug:before {
+  content: '\e902';
+}
+.icon-refresh:before {
+  content: '\e904';
+}
+.icon-touch:before {
+  content: '\e906';
+}
+.icon-caret-down:before {
+  content: '\e907';
+}
+.icon-devtools:before {
+  content: '\e900';
+}
+.icon-shapes:before {
+  content: '\e905';
+}
+.icon-more:before {
+  content: '\e903';
+}

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com">
+    <link rel="icon" href="data:image/ico;base64,aWNv">
+    <link rel="stylesheet" href="css/common.css">
+    <script>
+        if (!window.ipcRenderer) {
+            window.ipcRenderer = {
+                sendToHost: function(channel, ...args) {
+                    try {
+                        window.parent.postMessage({ channel: channel, args: args }, '*');
+                    } catch(e) {}
+                }
+            };
+        }
+        (function() {
+            var levels = ['log', 'info', 'warn', 'error'];
+            levels.forEach(function(lvl) {
+                var orig = console[lvl];
+                console[lvl] = function() {
+                    orig.apply(console, arguments);
+                    try {
+                        var args = [];
+                        for (var i = 0; i < arguments.length; i++) {
+                            var a = arguments[i];
+                            if (typeof a === 'object') {
+                                try { args.push(JSON.stringify(a)); } catch(e) { args.push(String(a)); }
+                            } else {
+                                args.push(String(a));
+                            }
+                        }
+                        window.parent.postMessage({
+                            type: 'macle-console',
+                            level: lvl,
+                            args: args,
+                            time: new Date().toLocaleTimeString()
+                        }, '*');
+                    } catch(e) {}
+                };
+            });
+        })();
+    </script>
+    <script type="text/javascript" src="native/native.js"></script>
+    <style>
+        body {
+            background-color: rgb(248, 248, 248);
+        }
+    </style>
+</head>
+
+<body id='macle-main'>
+    <div class="sc-bdVaJa etovjn" id="status" style="background-color:rgb(0, 0, 0); color: rgb(0, 0, 0);">
+        <div>
+            <span><i class="sc-bwzfXH cCYaul"  id="signal" style="background-color: rgb(0, 0, 0);"></i></span>
+            <span style="margin: 0px 2px;">Macle</span>
+            <span><i class="sc-htpNat hvitLT" style="background-color: rgb(0, 0, 0);"></i></span>
+        </div>
+        <div class="sc-bZQynM henTnI"><p>11:36</p></div>
+        <div>
+            <span class="sc-gzVnrw jpXuzg">100%</span>
+            <span>
+                <div class="sc-bxivhb bjcVct" id="battery-a" style="border-color: rgb(0, 0, 0);">
+                    <div class="sc-ifAKCX cdRCoD" id='battery-b' style="background-color: rgb(0, 0, 0);"></div>
+                    <div class="sc-EHOje fOLVCs" id='battery-c' style="background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </span>
+        </div>
+    </div>
+    <div id="head-tabbar" class="sc-htoDjs cQjVZl" style="background-color: rgb(0, 0, 0); color: rgb(0, 0, 0);">
+        <div class="sc-jTzLTM cdZISU" id="goback" onclick="goBackPage()" style="visibility: hidden;">
+            <i class="sc-jzJRlG ksBUTu" id="head-tabbar-i" style="background-color: rgb(0, 0, 0);"></i>
+        </div>
+        <div class="sc-dnqmqq ebXHwU" style="display: block;">
+            <h2 class="sc-iwsKbI gferPh">
+                <i class="sc-cSHVUG bPHVPr" style="display: none; background-color: rgb(0, 0, 0);"></i>
+                <span id="title" style="font-family: GothamRounded, GothamRounded-Bold;font-size: 16px;font-weight: 500;"></span>
+            </h2>
+        </div>
+    </div>
+    <div id="menuButton" class="sc-gZMcBi jZVkoE" style="position: absolute;right: 10px;z-index: 100;">
+        <div class="sc-gqjmRU gBcYTa" style="background-color: rgba(255, 255, 255, 0.6); border-color: rgba(0, 0, 0, 0.05);">
+            <div class="sc-fjdhpX fDwLsC">
+                <i class="sc-kgoBCf fEZocp" style="background-color: rgb(0, 0, 0);" id="capsule-status"></i>
+            </div>
+            <span class="sc-VigVT dhLBTW" style="background: rgba(0, 0, 0, 0.15);"></span>
+            <div class="sc-fjdhpX fDwLsC">
+                <i class="sc-kGXeez gvgaer" style="background-color: rgb(0, 0, 0);" id="capsule-round"
+                onclick='onAppHide()'></i>
+            </div>
+        </div>
+    </div>
+    <div id="body">
+      <div id="background">
+        <i class="dot bg-loading1 cCYaul" style="background-color: #fff;width:10px;height:10px; border-radius: 50%;"></i>
+        <i class="dot bg-loading2 cCYaul" style="background-color: #fff;width:10px;height:10px; border-radius: 50%;"></i>
+        <i class="dot bg-loading3 cCYaul" style="background-color: #fff;width:10px;height:10px; border-radius: 50%;"></i>
+        </div>
+        <div id="mask-loading">
+          <i class="dot bg-loading1 cCYaul" style="background-color: #fff;width:10px;height:10px; border-radius: 50%;"></i>
+          <i class="dot bg-loading2 cCYaul" style="background-color: #fff;width:10px;height:10px; border-radius: 50%;"></i>
+          <i class="dot bg-loading3 cCYaul" style="background-color: #fff;width:10px;height:10px; border-radius: 50%;"></i>
+        </div>
+    </div>
+
+    <div id="macle-dialog-container" style="display: none;">
+        <div class="macle-mask"></div>
+    </div>
+
+    <div id="macle-transparent-mask" class="macle-transparent-mask" style="display: none;"></div>
+    <div id='macle-app-hide' style="display: none;">
+      <div class="macle-app-hide-wrapper">
+          <div class="msg">小程序已退至后台</div>
+          <hr>
+          <div class='macle-app-hide-back' onclick='onAppShow()'>onAppShow</div>
+
+          <div class="chooseApp">
+            <span class="tag choose" id="his" onclick="clickHis()">HIS</span>
+            <span class="tag" id="cloud" onclick="clickCloud()">华为云</span>
+            <input id="searchApp" oninput='searchApp()'></input>
+            <div class="app-list" id="appList">
+            </div>
+          </div>
+
+      </div>
+    </div>
+</body>
+
+</html>

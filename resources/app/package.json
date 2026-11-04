@@ -1,0 +1,66 @@
+{
+  "name": "macle-simulator",
+  "version": "1.0.1",
+  "innerVersion": "23.6.0-1.0.1",
+  "description": "macle小程序模拟器",
+  "main": "out/main.js",
+  "jest": {
+    "verbose": true,
+    "collectCoverage": true,
+    "roots": [
+      "<rootDir>"
+    ],
+    "projects": [
+      {
+        "displayName": "node",
+        "testEnvironment": "node",
+        "testMatch": [
+          "**/test/**/*.test?(.node).js"
+        ]
+      },
+      {
+        "displayName": "dom",
+        "testEnvironment": "jsdom",
+        "testMatch": [
+          "**/test/**/*.test.dom.js"
+        ]
+      }
+    ],
+    "collectCoverageFrom": [
+      "**/simulator/preview/*.js",
+      "**/simulator/common/**",
+      "!**/dist/**",
+      "**/utils/**",
+      "!**/node_modules/**",
+      "!**/out/**"
+    ],
+    "reporters": [
+      "default",
+      [
+        "jest-junit",
+        {
+          "outputDirectory": "<rootDir>/success",
+          "outputName": "report.xml"
+        }
+      ]
+    ]
+  },
+  "repository": "https://www.huawei.com",
+  "author": "MacleTeam",
+  "license": "MIT",
+  "dependencies": {
+    "@macle/commander": "0.0.5",
+    "@macle/form-data": "0.0.2",
+    "@macle/fs-extra": "0.0.1",
+    "@macle/multer": "0.0.3",
+    "@macle/portfinder": "0.0.4",
+    "axios": "1.12.0",
+    "body-parser": "1.20.3",
+    "express": "4.21.0"
+  },
+  "overrides": {
+    "follow-redirects@^1.15.4": "1.15.6",
+    "object-inspect@^1.9.0": "1.12.3",
+    "get-intrinsic@^1.0.2": "1.2.1"
+  }
+}
