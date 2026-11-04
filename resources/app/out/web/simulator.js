@@ -25,6 +25,7 @@
 
   // DOM Elements
   const deviceSelect = document.getElementById('device-select');
+  const pageSelect = document.getElementById('page-select');
   const scaleSelect = document.getElementById('scale-select');
   const rotateBtn = document.getElementById('rotate-btn');
   const refreshBtn = document.getElementById('refresh-btn');
@@ -246,6 +247,9 @@
       const path = data.args[0];
       pagePathEl.textContent = path;
       pagePathEl.title = path;
+      if (pageSelect) {
+        pageSelect.value = path;
+      }
     }
 
     // Handle miniprogram console logs
@@ -311,27 +315,92 @@
     }
   }
 
+  // Page Selection
+  if (pageSelect) {
+    pageSelect.addEventListener('change', (e) => {
+      const page = e.target.value;
+      if (!page) return;
+      try {
+        if (simulatorIframe.contentWindow && typeof simulatorIframe.contentWindow.goToPage === 'function') {
+          simulatorIframe.contentWindow.goToPage(page);
+          addLog('info', `Navigated simulator to: ${page}`);
+          return;
+        }
+      } catch (err) {}
+      const proj = projectInfo ? projectInfo.projectName : 'dist';
+      simulatorIframe.src = `/${proj}/root/debug/simulator/index.html?entryPagePath=${encodeURIComponent(page)}`;
+      addLog('info', `Switched entry page to: ${page}`);
+    });
+  }
+
+  function loadAppPages(proj) {
+    fetch(`/${proj}/root/debug/app/app-config.json`)
+      .then(r => r.json())
+      .then(config => {
+        if (config.pages && Array.isArray(config.pages) && pageSelect) {
+          pageSelect.innerHTML = '';
+          config.pages.forEach(p => {
+            const opt = document.createElement('option');
+            opt.value = p;
+            opt.textContent = p;
+            pageSelect.appendChild(opt);
+          });
+          const urlParam = new URLSearchParams(window.location.search).get('page') || new URLSearchParams(window.location.search).get('entryPagePath');
+          if (urlParam) {
+            pageSelect.value = urlParam;
+          }
+        }
+      })
+      .catch(() => {});
+  }
+
   // Initialize
   function init() {
     updateDeviceDimensions();
     setupLiveReload();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetPage = urlParams.get('page') || urlParams.get('entryPagePath');
+    const entryQuery = targetPage ? `?entryPagePath=${encodeURIComponent(targetPage)}` : '';
+
+    if (targetPage) {
+      let tries = 0;
+      function autoNavigate() {
+        tries++;
+        try {
+          if (simulatorIframe.contentWindow && typeof simulatorIframe.contentWindow.goToPage === 'function') {
+            simulatorIframe.contentWindow.goToPage(targetPage);
+            if (pageSelect) pageSelect.value = targetPage;
+            addLog('info', `Auto-navigated to target page: ${targetPage}`);
+            return;
+          }
+        } catch (e) {}
+        if (tries < 30) setTimeout(autoNavigate, 200);
+      }
+      simulatorIframe.addEventListener('load', () => {
+        setTimeout(autoNavigate, 400);
+      });
+    }
 
     // Fetch project info
     fetch('/api/project-info')
       .then(res => res.json())
       .then(info => {
         projectInfo = info;
-        simulatorIframe.src = info.simulatorUrl;
-        const fullUrl = new URL(info.simulatorUrl, window.location.href).href;
+        loadAppPages(info.projectName);
+        const finalUrl = info.simulatorUrl + entryQuery;
+        simulatorIframe.src = finalUrl;
+        const fullUrl = new URL(finalUrl, window.location.href).href;
         qrUrlEl.textContent = fullUrl;
         addLog('info', `Connected to Macle project: ${info.projectName}`);
-        addLog('info', `Simulator runtime: ${info.simulatorUrl}`);
+        addLog('info', `Simulator runtime: ${finalUrl}`);
       })
       .catch(err => {
         // Fallback: parse query parameters
         const params = new URLSearchParams(window.location.search);
         const proj = params.get('project') || 'dist';
-        const simUrl = `/${proj}/root/debug/simulator/`;
+        loadAppPages(proj);
+        const simUrl = `/${proj}/root/debug/simulator/${entryQuery}`;
         simulatorIframe.src = simUrl;
         qrUrlEl.textContent = new URL(simUrl, window.location.href).href;
         addLog('info', `Loaded simulator at: ${simUrl}`);

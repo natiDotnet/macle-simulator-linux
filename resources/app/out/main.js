@@ -3,7 +3,8 @@
   const webDir=c.join(__dirname,"web");
   if(s.existsSync(webDir))h.use("/__web",l.static(webDir));
   h.get(["/","/web","/preview"],(function(req,res){
-    res.redirect("/__web/index.html?project="+encodeURIComponent(n)+"&port="+x);
+    const qs = req.url.includes("?") ? "&" + req.url.slice(req.url.indexOf("?") + 1) : "";
+    res.redirect("/__web/index.html?project="+encodeURIComponent(n)+"&port="+x+qs);
   }));
   h.get("/api/project-info",(function(req,res){
     res.json({projectName:n,port:x,simulatorUrl:"/"+n+"/root/debug/simulator/",composeDir:c.join(e,n)});
