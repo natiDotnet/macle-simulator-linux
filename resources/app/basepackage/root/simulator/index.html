@@ -7,43 +7,6 @@
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com">
     <link rel="icon" href="data:image/ico;base64,aWNv">
     <link rel="stylesheet" href="css/common.css">
-    <script>
-        if (!window.ipcRenderer) {
-            window.ipcRenderer = {
-                sendToHost: function(channel, ...args) {
-                    try {
-                        window.parent.postMessage({ channel: channel, args: args }, '*');
-                    } catch(e) {}
-                }
-            };
-        }
-        (function() {
-            var levels = ['log', 'info', 'warn', 'error'];
-            levels.forEach(function(lvl) {
-                var orig = console[lvl];
-                console[lvl] = function() {
-                    orig.apply(console, arguments);
-                    try {
-                        var args = [];
-                        for (var i = 0; i < arguments.length; i++) {
-                            var a = arguments[i];
-                            if (typeof a === 'object') {
-                                try { args.push(JSON.stringify(a)); } catch(e) { args.push(String(a)); }
-                            } else {
-                                args.push(String(a));
-                            }
-                        }
-                        window.parent.postMessage({
-                            type: 'macle-console',
-                            level: lvl,
-                            args: args,
-                            time: new Date().toLocaleTimeString()
-                        }, '*');
-                    } catch(e) {}
-                };
-            });
-        })();
-    </script>
     <script type="text/javascript" src="native/native.js"></script>
     <style>
         body {
@@ -113,13 +76,13 @@
     <div id="macle-transparent-mask" class="macle-transparent-mask" style="display: none;"></div>
     <div id='macle-app-hide' style="display: none;">
       <div class="macle-app-hide-wrapper">
-          <div class="msg">Mini Program moved to background</div>
+          <div class="msg">小程序已退至后台</div>
           <hr>
           <div class='macle-app-hide-back' onclick='onAppShow()'>onAppShow</div>
 
           <div class="chooseApp">
             <span class="tag choose" id="his" onclick="clickHis()">HIS</span>
-            <span class="tag" id="cloud" onclick="clickCloud()">Huawei Cloud</span>
+            <span class="tag" id="cloud" onclick="clickCloud()">华为云</span>
             <input id="searchApp" oninput='searchApp()'></input>
             <div class="app-list" id="appList">
             </div>

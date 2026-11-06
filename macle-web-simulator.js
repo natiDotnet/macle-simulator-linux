@@ -115,11 +115,49 @@ if (!hasRoot) {
   }
 }
 
-// Execute main.js
-try {
-  require(mainJsPath);
-  app.emit("ready");
-} catch (err) {
-  console.error("Failed to start Macle simulator:", err);
-  process.exit(1);
+// Auto-compile using @macle/compiler if available
+async function startSimulator() {
+  const compilerCandidates = [
+    path.join(__dirname, "../../DevToolkit_26.6.0/DevToolkit_26.6.0-LG0001/Macle_26.6.0-LG0001_Engine_Compiler/node_modules/@macle/compiler"),
+    path.join(__dirname, "../DevToolkit_26.6.0/DevToolkit_26.6.0-LG0001/Macle_26.6.0-LG0001_Engine_Compiler/node_modules/@macle/compiler"),
+    path.join(__dirname, "../../../DevToolkit_26.6.0/DevToolkit_26.6.0-LG0001/Macle_26.6.0-LG0001_Engine_Compiler/node_modules/@macle/compiler"),
+    path.join(__dirname, "../../DevToolkit_26.6.0/Macle_26.6.0_DevSuite_IDE/macle-miniprogram-tools-26.6.0-file/extension/node_modules/@macle/compiler"),
+    path.join(__dirname, "../Macle_26.6.0_DevSuite_IDE/macle-miniprogram-tools-26.6.0-file/extension/node_modules/@macle/compiler"),
+    path.join(__dirname, "Macle_25.9.0_DevSuite_IDE/macle-miniprogram-tools-25.9.0-file/extension/node_modules/@macle/compiler"),
+    path.join(__dirname, "../Macle_25.9.0_DevSuite_IDE/macle-miniprogram-tools-25.9.0-file/extension/node_modules/@macle/compiler"),
+    path.join(__dirname, "../Macle_25.9.0_DevSuite_IDE/MacleTeam.macle-miniprogram-tools-26.6.0/extension/node_modules/@macle/compiler"),
+    path.join(__dirname, "../../DevToolkit_25.9.0/Macle_25.9.0_DevSuite_IDE/macle-miniprogram-tools-25.9.0-file/extension/node_modules/@macle/compiler")
+  ];
+  const compilerPath = compilerCandidates.find(p => fs.existsSync(p));
+
+  const sourceIdx = process.argv.indexOf("-s") !== -1 ? process.argv.indexOf("-s") : process.argv.indexOf("--source");
+  if (compilerPath && sourceIdx !== -1 && process.argv[sourceIdx + 1]) {
+    try {
+      const compiler = require(compilerPath);
+      const srcDir = path.resolve(process.argv[sourceIdx + 1]);
+      const projectName = path.basename(srcDir);
+      const os = require("os");
+      const outApp = path.join(os.homedir(), ".macle/target/compose", projectName, "root/debug/app");
+      fs.mkdirSync(outApp, { recursive: true });
+      console.log(`[Simulator] Pre-compiling Macle code (${srcDir})...`);
+      await compiler.compile(srcDir, outApp, { debug: true, es5: false });
+      if (fs.existsSync(path.join(srcDir, "project.config.json"))) {
+        fs.copyFileSync(path.join(srcDir, "project.config.json"), path.join(outApp, "project.config.json"));
+      }
+      console.log(`[Simulator] Pre-compilation successful -> ${outApp}`);
+    } catch (err) {
+      console.warn("[Simulator] Pre-compilation notice:", err.message);
+    }
+  }
+
+  // Execute main.js
+  try {
+    require(mainJsPath);
+    app.emit("ready");
+  } catch (err) {
+    console.error("Failed to start Macle simulator:", err);
+    process.exit(1);
+  }
 }
+
+startSimulator();

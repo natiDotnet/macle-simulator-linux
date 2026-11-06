@@ -49,18 +49,28 @@
   "author": "MacleTeam",
   "license": "MIT",
   "dependencies": {
-    "@macle/commander": "0.0.5",
-    "@macle/form-data": "0.0.2",
-    "@macle/fs-extra": "0.0.1",
-    "@macle/multer": "0.0.3",
-    "@macle/portfinder": "0.0.4",
-    "axios": "1.12.0",
-    "body-parser": "1.20.3",
+    "@macle/commander": "0.0.15",
+    "@macle/form-data": "9.1.90",
+    "@macle/fs-extra": "9.1.90",
+    "@macle/multer": "9.1.90",
+    "@macle/portfinder": "9.1.90",
+    "axios": "1.20.0",
+    "body-parser": "2.3.0",
     "express": "4.21.0"
   },
   "overrides": {
     "follow-redirects@^1.15.4": "1.15.6",
     "object-inspect@^1.9.0": "1.12.3",
-    "get-intrinsic@^1.0.2": "1.2.1"
+    "get-intrinsic@^1.0.2": "1.2.1",
+    "express": {
+      "body-parser": "1.20.6"
+    },
+    "body-parser": {
+      "content-type": "2.0.0",
+      "qs": "6.15.3",
+      "type-is": {
+        "media-typer": "1.1.0"
+      }
+    }
   }
 }

@@ -1,6 +1,6 @@
-# Macle Mini Program Simulator (Linux & Web)
+# Macle Mini Program Simulator (Linux & Web) - v26.6.0-LG0001
 
-This repository contains the runtime assets and launcher utilities for the **Macle Mini Program Simulator** (Huawei / Ethio Telecom platform).
+This repository contains the runtime framework (v26.6.0-LG0001 / engine v100.4.2), assets, and launcher utilities for the **Macle Mini Program Simulator** (Huawei / Ethio Telecom platform).
 
 ---
 
